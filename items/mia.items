@@ -1,0 +1,37 @@
+Group All
+Group gGF 		(All)
+Group gC 		(All)
+Group g1F		(All)
+Group gAttic		(All)
+Group gShutters                                              (All)
+Group gMobiles
+
+Group GF_LivingRoom	 	"Living Room" 	<read> 	(gGF)
+
+Group GF_Kitchen 	"Kitchen" 	<kitchen>	 	(gGF)
+Group GF_Dining 	"Dining"	<dining> 		 		(gGF)
+Group 1F_Hallway 	"Hallway"	 		 		(g1F)
+
+/* active groups */
+Group:Switch:OR(ON, OFF) 		Lights 		"All Lights [(%d)]" 								(All)
+
+/* Lights */
+Switch Light_GF_LivingRoom_Ceiling	"Ceiling"  		(GF_LivingRoom, Lights)
+Switch Light_GF_LivingRoom_StandingLamps	"Standing Lamps"  		(GF_LivingRoom, Lights)
+Switch Light_GF_Kitchen_Left	"Left"		(GF_Kitchen, Lights)
+Switch Light_GF_Kitchen_Right	"Right"  	(GF_Kitchen, Lights)
+Switch Light_GF_Dining_Ceiling	"Ceiling"  		(GF_Dining, Lights)
+
+Switch Light_GF_Hallway		"Hallway"  		(gGF, Lights)
+Switch Light_1F_Hallway_Wall		"Wall"  		(1F_Hallway, Lights)
+
+Switch Light_Cellar_Ceiling		"Ceiling" 	  	(gC, Lights)
+Switch Light_Attic_Ceiling		"Ceiling" 	  	(gAttic, Lights)
+
+
+/* Rollershutters */
+Rollershutter Shutter_GF_Living  "Shutter"	(GF_LivingRoom, gShutters)
+Rollershutter Shutters	 	"Living Room"
+
+Switch Presence
+Switch phonePieter (gMobiles) {nh="10.0.1.4"}
