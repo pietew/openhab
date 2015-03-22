@@ -1,0 +1,14 @@
+sitemap mia label="Mia"
+{
+	Frame label="Lights" {
+		Group item=gGF label="Ground Floor" icon="relax"
+		Group item=g1F label="1st Floor" icon="moon"
+		Group item=gAttic label="Attic" icon="roof"
+		Group item=gC label="Cellar" icon="cellar"
+		Switch item=Lights mappings=[OFF="All Off"]
+		Group item=gMobiles label="Mobiles"
+	}
+	Frame label="Shutters" {
+		Switch item=Shutters
+	}
+}
