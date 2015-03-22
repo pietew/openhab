@@ -1,0 +1,147 @@
+// Variable Declarations
+// Constants
+var String url = "https://<your openmotics local gateway ip or dns name>"
+var String username = "<your openmotics gateway username>"
+var String password = "<your openmotics gateway password>"
+
+
+// Variables
+var String tokenJSON = "Hi I am JSON"
+var String token = ""
+
+// API calls require an authentication token, use the login call to get a token every 30 minutes (tokens are valid for 1 hour)
+rule ResetToken
+when
+    Time cron "0 0/30 * * * ?"  or System started
+then
+    logInfo("FILE", "Resetting token...")
+    tokenJSON = sendHttpGetRequest(url + "/login?username=" + username + "&password=" + password)
+    token = transform("JSONPATH","$.token",tokenJSON)
+    logInfo("FILE", "New token is " + token)
+end
+
+rule AllLightsOFF
+when
+    Item Lights received command OFF
+then 
+    sendHttpGetRequest(url + "/set_all_lights_off?token=" + token)
+end
+
+rule Light_GF_LivingRoom_CeilingON
+when
+    Item Light_GF_LivingRoom_Ceiling received command ON
+then
+    sendHttpGetRequest(url + "/set_output?token=" + token + "&id=3&is_on=true")
+end
+
+rule Light_GF_LivingRoom_CeilingOFF
+when
+    Item Light_GF_LivingRoom_Ceiling received command OFF
+then 
+    sendHttpGetRequest(url + "/set_output?token=" + token + "&id=3&is_on=false")
+end
+
+rule Light_GF_LivingRoom_StandingLampsON
+when
+    Item Light_GF_LivingRoom_StandingLamps received command ON
+then 
+    sendHttpGetRequest(url + "/set_output?token=" + token + "&id=32&is_on=true")
+end
+
+rule Light_GF_LivingRoom_StandingLampsOFF
+when
+    Item Light_GF_LivingRoom_StandingLamps received command OFF
+then 
+    sendHttpGetRequest(url + "/set_output?token=" + token + "&id=32&is_on=false")
+end
+
+rule Light_GF_Kitchen_LeftON
+when
+    Item Light_GF_Kitchen_Left received command ON
+then 
+    sendHttpGetRequest(url + "/set_output?token=" + token + "&id=34&is_on=true")
+end
+rule Light_GF_Kitchen_LeftOFF
+when
+    Item Light_GF_Kitchen_Left received command OFF
+then 
+    sendHttpGetRequest(url + "/set_output?token=" + token + "&id=34&is_on=false")
+end
+
+rule Light_GF_Dining_CeilingON
+when
+    Item Light_GF_Dining_Ceiling received command ON
+then 
+    sendHttpGetRequest(url + "/set_output?token=" + token + "&id=9&is_on=true")
+end
+rule Light_GF_Dining_CeilingOFF
+when
+    Item Light_GF_Dining_Ceiling received command OFF
+then 
+    sendHttpGetRequest(url + "/set_output?token=" + token + "&id=9&is_on=false")
+end
+
+rule Light_Cellar_CeilingON
+when
+    Item Light_Cellar_Ceiling received command ON
+then
+    sendHttpGetRequest(url + "/set_output?token=" + token + "&id=36&is_on=true")
+end
+rule Light_Cellar_CeilingOFF
+when
+    Item Light_Cellar_Ceiling received command OFF
+then 
+    sendHttpGetRequest(url + "/set_output?token=" + token + "&id=36&is_on=false")
+end
+
+rule Light_Attic_CeilingON
+when
+    Item Light_Attic_Ceiling received command ON
+then
+    sendHttpGetRequest(url + "/set_output?token=" + token + "&id=35&is_on=true")
+end
+rule Light_Attic_CeilingOFF
+when
+    Item Light_Attic_Ceiling received command OFF
+then 
+    sendHttpGetRequest(url + "/set_output?token=" + token + "&id=35&is_on=false")
+end
+
+rule Shutter_GF_LivingUP
+when
+    Item Shutter_GF_Living received command UP or Time cron "0 0 7 ? * *" or Item Shutters received command UP
+then
+    sendHttpGetRequest(url + "/do_group_action?token=" + token + "&group_action_id=61")
+end
+rule Shutter_GF_LivingDOWN
+when
+    Item Shutter_GF_Living received command DOWN or Time cron "0 0 19 ? * *" or Item Shutters received command DOWN
+then
+    sendHttpGetRequest(url + "/do_group_action?token=" + token + "&group_action_id=60")
+end
+rule Shutter_GF_LivingSTOP
+when
+    Item Shutter_GF_Living received command STOP or Item Shutters received command STOP
+then
+    sendHttpGetRequest(url + "/do_group_action?token=" + token + "&group_action_id=62")
+end
+
+rule Light_ToiletON
+when
+    Time cron "0 0 7 ? * *"
+then 
+    sendHttpGetRequest(url + "/set_output?token=" + token + "&id=12&is_on=true")
+end
+
+rule Light_GF_HallwayON
+when
+    Item Light_GF_Hallway received command ON
+then 
+    sendHttpGetRequest(url + "/set_output?token=" + token + "&id=8&is_on=true")
+end
+rule Light_GF_HallwayOFF
+when
+    Item Light_GF_Hallway received command OFF
+then 
+    sendHttpGetRequest(url + "/set_output?token=" + token + "&id=8&is_on=false")
+end

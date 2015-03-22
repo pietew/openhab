@@ -1,0 +1,40 @@
+rule "Periodically check presence"
+when
+    Time cron "*/1 * * * *"  or System started
+then
+    logInfo("FILE", "Checking presence...")
+        if (Presence.state == ON)
+        {
+                logInfo("FILE", "Presence state is ON...")
+                if(gMobiles.members.filter(s | s.state == ON).size == 0) {
+                        logInfo("FILE", "No phone within reach, checking for flapping")
+                        if(gMobiles.members.filter(s | s.changedSince(now.minusMinutes(5))).size == 0) {
+                                logInfo("FILE", "Nobody is at home")
+                                sendCommand(Presence, OFF)
+                        }
+                }
+        }
+        else
+        {
+                logInfo("FILE", "Presence state is OFF...")
+                //For initialisation. If Presence is undefined or off, although it should be on.
+                if(gMobiles.members.filter(s | s.state == ON).size > 0) {
+                        sendCommand(Presence, ON)
+                }
+                else if (Presence.state == Undefined || Presence.state == Uninitialized) {
+                        sendCommand(Presence, OFF)
+                }
+        }
+end
+
+rule "Coming home"
+when
+        Item gMobiles changed
+then
+        if (Presence.state != ON) {
+                if(gMobiles.members.filter(s | s.state == ON).size > 0) {
+                        logInfo("FILE", "Somebody is home")
+                        sendCommand(Presence, ON)
+                }
+        }
+end
