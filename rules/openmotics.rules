@@ -9,7 +9,7 @@ var String password = "<your openmotics gateway password>"
 var String tokenJSON = "Hi I am JSON"
 var String token = ""
 
-// API calls require an authentication token, use the login call to get a token every 30 minutes (tokens are valid for 1 hour)
+// OpenMotics API call requires an authentication token; use the login call to get a token every 30 minutes (tokens are valid for 1 hour)
 rule ResetToken
 when
     Time cron "0 0/30 * * * ?"  or System started
